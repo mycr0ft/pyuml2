@@ -44,6 +44,36 @@ class ElementMixin(object):
     def owner(self):
         return self.eContainer()
 
+    # --- OCL subset (pyuml2.ocl) ------------------------------------
+    # Every UML metaclass specializes Element, so these methods reach
+    # every model object.  They keep the OCL 2.4 §11.5 spellings so
+    # transcribed constraint bodies read like the spec.
+    def oclIsKindOf(self, type_):
+        """OCL: self.oclIsKindOf(T) — conformance, transitive."""
+        from pyuml2.ocl import ocl_is_kind_of
+        return ocl_is_kind_of(self, type_)
+
+    def oclIsTypeOf(self, type_):
+        """OCL: self.oclIsTypeOf(T) — exact dynamic type."""
+        from pyuml2.ocl import ocl_is_type_of
+        return ocl_is_type_of(self, type_)
+
+    def oclAsType(self, type_):
+        """OCL: self.oclAsType(T) — retype, or None on mismatch."""
+        from pyuml2.ocl import ocl_as_type
+        return ocl_as_type(self, type_)
+
+    def oclType(self):
+        """OCL: self.oclType() — the dynamic EClass."""
+        from pyuml2.ocl import ocl_type
+        return ocl_type(self)
+
+    def oclIsUndefined(self):
+        """OCL: self.oclIsUndefined()."""
+        from pyuml2.ocl import ocl_is_undefined
+        return ocl_is_undefined(self)
+    # -----------------------------------------------------------------
+
     def __init__(
             self, ownedComment=None, ownedElement=None, owner=None, **
             kwargs):

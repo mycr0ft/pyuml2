@@ -186,3 +186,31 @@ def test_undefined():
     # unset reference reads as None -> undefined
     prop = Property(name="p")
     assert ocl_is_undefined(prop.type) is True
+
+# ---------------------------------------------------------------------
+# Spec-spelling methods on every UML element (via ElementMixin)
+
+
+def test_method_spellings():
+    comp = Component(name="K")
+    assert comp.oclIsKindOf(Class) is True
+    assert comp.oclIsTypeOf(Component) is True
+    assert comp.oclIsTypeOf(Class) is False
+    assert comp.oclAsType(Class) is comp
+    assert comp.oclType().name == "Component"
+    assert comp.oclIsUndefined() is False
+
+
+def test_method_reach_all_metaclasses():
+    # Element is the root: Property, Package, Activity all get the API
+    p = Property(name="p")
+    pk = Package(name="pk")
+    a = Activity(name="a")
+    for obj in (p, pk, a):
+        assert obj.oclIsKindOf(Element) is True
+        assert obj.oclIsUndefined() is False
+
+
+def test_method_as_type_mismatch_none():
+    prop = Property(name="p")
+    assert prop.oclAsType(Class) is None
